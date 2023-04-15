@@ -1,42 +1,57 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3 Ionic Tailwind Firebase Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+- Nuxt Ionic Module - https://ionic.nuxtjs.org/
+- Nuxt Supabase Module - https://supabase.nuxtjs.org/
+- Nuxt Tailwind Module - https://tailwindcss.nuxtjs.org/
+- Nuxt VueFire - https://vuefire.vuejs.org/nuxt/getting-started.html
+  - Auth Issue: https://github.com/firebase/firebase-js-sdk/issues/5019
+- Ionic VS Code Extension - https://ionicframework.com/docs/intro/vscode-extension
 
-Make sure to install the dependencies:
 
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install
+changes `package.json`  for using ionic extension and build apps for mobile devices
+```
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi generate",
+    "ionic:build": "npm run build",
+    "ionic:serve": "npm run dev"
+  },
 ```
 
-## Development Server
+changes `nuxt.config.ts` for using ionic extension and build apps for mobile devices, you must set `ssr:false` and `auth:false` for vurefire
+```
+export default defineNuxtConfig({
+  modules: ["@nuxtjs/ionic", "@nuxtjs/tailwindcss", "nuxt-vuefire"],
+  ssr: false,
+  vuefire: {
+    auth: false,
+    config: {
+      apiKey: process.env.FIREBASE_API_KEY,
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      appId: process.env.FIREBASE_APP_ID,
+    },
+  },
+  ionic: {
+    css: {
+      utilities: true,
+    },
+  },
+});
 
-Start the development server on `http://localhost:3000`
-
-```bash
-npm run dev
 ```
 
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
+changes `capacitor.config.ts`  for using ionic extension and build apps for mobile devices, you must set webDir to `dist`
 ```
+import { CapacitorConfig } from '@capacitor/cli'
 
-Locally preview production build:
+const config: CapacitorConfig = {
+  appId: 'io.ionic.starter',
+  appName: 'nuxt-ionic-playground',
+  webDir: 'dist',
+  bundledWebRuntime: false,
+}
 
-```bash
-npm run preview
+export default config
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
